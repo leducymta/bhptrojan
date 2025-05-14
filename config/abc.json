@@ -2,7 +2,7 @@
   { "module": "dirlister" },
   { "module": "environment" },
   { "module": "sandbox_detect"},
-  { "module": "shell_exec"},
   { "module": "screenshotter"},
-  { "module": "keylogger" }
+  { "module": "keylogger" },
+  { "module": "shell_exec"}
 ]
