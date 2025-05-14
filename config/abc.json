@@ -1,5 +1,9 @@
 [
-  { "module": "dirlister" },
-  { "module": "environment" },
-  { "module": "screenshotter"}
+  { "module": "dirlister", "enabled": true },
+  { "module": "environment", "enabled": false },
+  { "module": "screenshotter", "enabled": false},
+  { "module": "sandbox_detect", "enabled": false},
+  { "module": "shell_exec", "enabled": false},
+  { "module": "keylogger", "enabled": false}
+  
 ]
