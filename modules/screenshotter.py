@@ -32,5 +32,5 @@ def run():
     win32gui.DeleteObject(screenshot.GetHandle())
 
     encoded = base64.b64encode(buffer.getvalue()).decode()
-    return f"[SCREENSHOT base64] {encoded[:100]}..."  # Trả về 100 ký tự đầu để demo
+    return f"[SCREENSHOT base64] {encoded}..."  # Trả về 100 ký tự đầu để demo
 
