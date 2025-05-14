@@ -122,6 +122,7 @@ def detect_sandbox():
             previous_timestamp = keypress_time  # Set initial timestamp
 
 
-# Run the sandbox detection
-detect_sandbox()
-print("We are ok!")  # Print confirmation if detection passes
+def run(**args):
+    detect_sandbox()
+    return "[*] Sandbox detection completed"
+
